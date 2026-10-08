@@ -2,7 +2,6 @@ package App.States;
 
 import App.AppDataStorage;
 import App.DataConvert.ConverterToUniversal;
-import App.Proxy.TestClass;
 
 import java.util.List;
 
@@ -16,24 +15,18 @@ public class ConvertDataState extends AppState<AppStateMachine> {
     public void onEnter(AppStateMachine stateMachine) throws Exception {
         super.onEnter(stateMachine);
 
+        var converter = new ConverterToUniversal<>(storage.getType());
+
         List<?> data = storage.getOriginalData();
-
-        var converter = new ConverterToUniversal<Object>();
-
         for (var object : data) {
             converter.append(object);
         }
 
         var result = converter.build();
-
         storage.setConvertedData(result);
 
         for(var res : result) {
-            debuger.Log(TestClass.class);
-            var count = res.getCount();
-            for (var i = 0; i < count; i++) {
-                debuger.Log(res.getField(i));
-            }
+            debuger.Log(res);
         }
     }
 

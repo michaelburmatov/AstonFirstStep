@@ -11,24 +11,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConverterToUniversal<T> extends Builder<List<UniversalClass>, T> {
-    private List<UniversalClass> array = new ArrayList<>();
-    @Override
-    public void append(T context) {
-        Field[] fields = context.getClass().getFields(); //.getDeclaredFields();
-        var universalFields = new UniversalField<?>[fields.length];
-        for (var i = 0; i < fields.length; i++)
-            tryPreparateField(context, fields, i, universalFields);
+    private final List<UniversalClass> array = new ArrayList<>();
+    private final Class<T> type;
 
-        var universalClass = new UniversalClass(universalFields);
-        array.add(universalClass);
+    public ConverterToUniversal(Class<T> type) {
+        this.type = type;
     }
 
-    private static <T> void tryPreparateField(T context, Field[] fields, int i, UniversalField<?>[] universalFields) {
+    @Override
+    public void append(T context) {
+        Field[] fields = type.getDeclaredFields();
+        var universalFields = new UniversalField<?>[fields.length];
+
+        for (int i = 0; i < fields.length; i++) {
+            tryPreparateField(context, fields, i, universalFields);
+        }
+
+        array.add(new UniversalClass(universalFields));
+    }
+
+    private void tryPreparateField(T context, Field[] fields, int i, UniversalField<?>[] universalFields) {
         var field = fields[i];
         try {
+            field.setAccessible(true);
             universalFields[i] = new UniversalField<>(field.getType(), field.get(context));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Singleton.get(Debuger.class).Log(e);
         }
     }
