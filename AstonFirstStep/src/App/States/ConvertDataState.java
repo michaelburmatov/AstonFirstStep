@@ -4,6 +4,8 @@ import App.AppDataStorage;
 import App.DataConvert.ConverterToUniversal;
 import App.Proxy.TestClass;
 
+import java.util.List;
+
 public class ConvertDataState extends AppState<AppStateMachine> {
 
     public ConvertDataState(AppDataStorage storage) {
@@ -14,14 +16,17 @@ public class ConvertDataState extends AppState<AppStateMachine> {
     public void onEnter(AppStateMachine stateMachine) throws Exception {
         super.onEnter(stateMachine);
 
-        //---------------------Пример конвертера в универсальный класс----------------
-        var builder = new ConverterToUniversal<TestClass>();
-        builder.append(new TestClass(12, "323", false));
-        builder.append(new TestClass(5435, "hfghfgh", true));
-        builder.append(new TestClass(8216, "75hgfh", false));
-        builder.append(new TestClass(41, "-", true));
+        List<?> data = storage.getOriginalData();
 
-        var result = builder.build();
+        var converter = new ConverterToUniversal<Object>();
+
+        for (var object : data) {
+            converter.append(object);
+        }
+
+        var result = converter.build();
+
+        storage.setConvertedData(result);
 
         for(var res : result) {
             debuger.Log(TestClass.class);
