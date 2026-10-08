@@ -1,17 +1,18 @@
 package App.States.Strategizing;
 
+import App.Universal.ClassContainer;
 import Architecture.GoF.Behavioral.StratageResult;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class HandInputStratage implements StratageResult<List<?>, Scanner> {
+public class HandInputStratage implements StratageResult<List<ClassContainer>, Scanner> {
     @Override
-    public List<?> doStratage(Scanner context) {
+    public List<ClassContainer> doStratage(Scanner context) {
 
         //---------- Просто пример ---------
         var input = context.nextLine();
-        return new ArrayList<String>();
+        return new ArrayList<ClassContainer>();
     }
 }

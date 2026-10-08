@@ -1,0 +1,12 @@
+@Car#String!Tesla Model S#int!2022#String!Red
+@Car#String!Toyota Camry#int!2020#String!Black
+@Car#String!Ford Mustang#int!2018#String!Blue
+@Car#String!Honda Civic#int!2021#String!White
+@Car#String!BMW M3#int!2023#String!Silver
+@Car#String!Audi A4#int!2019#String!Gray
+@Car#String!Mercedes C-Class#int!2021#String!Black
+@Car#String!Volkswagen Golf#int!2020#String!Blue
+@Car#String!Nissan Altima#int!2017#String!Red
+@Car#String!Chevrolet Camaro#int!2019#String!Yellow
+@Car#String!Porsche 911#int!2024#String!Orange
+@Car#String!Mazda MX-5#int!20
