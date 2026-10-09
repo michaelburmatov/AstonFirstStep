@@ -25,7 +25,7 @@ public class AppStrategizingState<R> extends AppState<AppStateMachine> {
         return ((StratageResult<R, C>) stratage).doStratage(context);
     }
 
-    // Ключ задаётся явно - для состояний с несколькими стратегиями
+    // Ключ задаётся явно - для состояний с несколькими стратегиями - нужно будет для мульти-вызова методов сортировки
     @SuppressWarnings("unchecked")
     protected <C> R doStratage(Class<?> key, C context) throws Exception {
         var stratage = stratages.get(key);

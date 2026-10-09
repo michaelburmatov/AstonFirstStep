@@ -18,6 +18,7 @@ public class InputState extends AppStrategizingState<List<?>> {
         super.onUpdate(stateMachine);
 
         var result = doStratage(new Scanner(System.in));
+        storage.setOriginalData(result);
         stateMachine.switchState(ValidationDataState.class);
     }
 }

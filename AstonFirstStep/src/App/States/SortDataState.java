@@ -1,6 +1,7 @@
 package App.States;
 
 import App.AppDataStorage;
+import App.Comparators.UniversalComparators;
 import App.States.Strategizing.AppStrategizingState;
 import App.States.Strategizing.Sorting.*;
 import App.Universal.UniversalClass;
@@ -12,8 +13,8 @@ public class SortDataState extends AppStrategizingState<List<UniversalClass>> {
     public SortDataState(AppDataStorage storage) {
         super(storage);
 
-        stratages.put(BubbleSortStratage.class, new BubbleSortStratage<>());
-        stratages.put(QuickSortStratage.class, new QuickSortStratage<>());
+        stratages.put(BubbleSortStratage.class,    new BubbleSortStratage<>());
+        stratages.put(QuickSortStratage.class,     new QuickSortStratage<>());
         stratages.put(InsertionSortStratage.class, new InsertionSortStratage<>());
     }
 
@@ -22,15 +23,17 @@ public class SortDataState extends AppStrategizingState<List<UniversalClass>> {
         super.onUpdate(stateMachine);
 
         List<UniversalClass> data = storage.getConvertedData();
+        if (data == null || data.isEmpty()) {
+            stateMachine.switchState(OutputDataState.class);
+            return;
+        }
 
-        // Реализовать выбор поля: 0, 1, 2
-        java.util.Comparator<UniversalClass> comparator = (a, b) -> 0;
+        var context = new SortContext<>(
+                data,
+                UniversalComparators.byField(0));
 
-        SortContext<UniversalClass> context = new SortContext<>(data, comparator);
-
-        // List<UniversalClass> sorted = doStratage(QuickSortStratage.class, context);
-
-        // storage.setConvertedData(sorted);
+        var sorted = doStratage(QuickSortStratage.class, context);
+        storage.setConvertedData(sorted);
 
         stateMachine.switchState(OutputDataState.class);
     }

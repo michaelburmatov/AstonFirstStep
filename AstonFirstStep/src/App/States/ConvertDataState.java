@@ -14,21 +14,31 @@ public class ConvertDataState extends AppState<AppStateMachine> {
     public void onEnter(AppStateMachine stateMachine) throws Exception {
         super.onEnter(stateMachine);
 
-        //---------------------Пример конвертера в универсальный класс----------------
         var builder = new ConverterToUniversal<TestClass>();
-        builder.append(new TestClass(12, "323", false));
-        builder.append(new TestClass(5435, "hfghfgh", true));
-        builder.append(new TestClass(8216, "75hgfh", false));
-        builder.append(new TestClass(41, "-", true));
 
-        var result = builder.build();
-
-        for(var res : result) {
-            debuger.Log(TestClass.class);
-            var count = res.getCount();
-            for (var i = 0; i < count; i++) {
-                debuger.Log(res.getField(i));
+        var original = storage.getOriginalData();
+        if (original != null) {
+            for (var raw : original) {
+                var parsed = parseTestClass(String.valueOf(raw));
+                if (parsed != null) {
+                    builder.append(parsed);
+                }
             }
+        }
+
+        storage.setConvertedData(builder.build());
+    }
+
+    private TestClass parseTestClass(String raw) {
+        var parts = raw.split(",");
+        if (parts.length != 3) return null;
+        try {
+            Integer first  = Integer.parseInt(parts[0].trim());
+            String  second = parts[1].trim();
+            Boolean third  = Boolean.parseBoolean(parts[2].trim());
+            return new TestClass(first, second, third);
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 

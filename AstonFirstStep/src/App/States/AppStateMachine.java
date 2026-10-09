@@ -1,11 +1,14 @@
 package App.States;
 
+import java.util.ArrayList;
 import App.AppDataStorage;
 import Architecture.GoF.Behavioral.StateMachine;
 
 public class AppStateMachine extends StateMachine<AppStateMachine> {
     private AppDataStorage storage;
     public AppStateMachine(){
+        this.storage = new AppDataStorage(new ArrayList<>());
+
         states.put(InitState.class, new InitState());
         states.put(InputState.class, new InputState(storage));
         states.put(ValidationDataState.class, new ValidationDataState(storage));
