@@ -5,7 +5,6 @@ import App.States.AppState;
 import App.States.AppStateMachine;
 import Architecture.GoF.Behavioral.StratageResult;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,14 +16,21 @@ public class AppStrategizingState<R> extends AppState<AppStateMachine> {
         super(storage);
     }
 
+    // Ключ = класс контекста - для состояний с одной стратегией
+    @SuppressWarnings("unchecked")
     protected <C> R doStratage(C context) throws Exception {
         var stratage = stratages.get(context.getClass());
-        if(stratage == null)
+        if (stratage == null)
             throw new Exception("Stratage " + context.getClass() + " is non found!");
+        return ((StratageResult<R, C>) stratage).doStratage(context);
+    }
 
-        if(context instanceof C)
-            return ((StratageResult<R, C>)stratage).doStratage(context);
-
-        throw new Exception("Cant find stratage to type: " + context.getClass());
+    // Ключ задаётся явно - для состояний с несколькими стратегиями
+    @SuppressWarnings("unchecked")
+    protected <C> R doStratage(Class<?> key, C context) throws Exception {
+        var stratage = stratages.get(key);
+        if (stratage == null)
+            throw new Exception("Stratage " + key + " is non found!");
+        return ((StratageResult<R, C>) stratage).doStratage(context);
     }
 }
