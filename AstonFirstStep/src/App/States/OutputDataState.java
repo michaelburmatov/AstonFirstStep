@@ -23,6 +23,6 @@ public class OutputDataState extends AppState<AppStateMachine> {
             System.out.println(sb);
         }
 
-        stateMachine.stop();
+        stateMachine.switchState(InputState.class);
     }
 }

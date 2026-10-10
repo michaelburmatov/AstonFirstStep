@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class InputState extends AppStrategizingState<List<?>> {
+
+    private final Scanner scanner = new Scanner(System.in);
+
     public InputState(AppDataStorage storage) {
         super(storage);
         stratages.put(Scanner.class, new HandInputStratage());
@@ -17,7 +20,13 @@ public class InputState extends AppStrategizingState<List<?>> {
     public void onUpdate(AppStateMachine stateMachine) throws Exception {
         super.onUpdate(stateMachine);
 
-        var result = doStratage(new Scanner(System.in));
+        var result = doStratage(scanner);
+
+        if (result == null) {
+            stateMachine.stop();
+            return;
+        }
+
         storage.setOriginalData(result);
         stateMachine.switchState(ValidationDataState.class);
     }

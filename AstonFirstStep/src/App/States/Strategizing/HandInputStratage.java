@@ -15,6 +15,10 @@ public class HandInputStratage implements StratageResult<List<?>, Scanner> {
         System.out.println("Ввод строки (формат: <<Integer, String, Boolean; Integer, String, Boolean; ...>>)\n");
         String input = context.nextLine();
 
+        if ("exit".equalsIgnoreCase(input.trim())) {
+            return null;
+        }
+
         if (input == null || input.isBlank()) {
             return new ArrayList<>();
         }
