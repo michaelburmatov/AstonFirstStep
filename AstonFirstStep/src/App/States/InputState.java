@@ -13,7 +13,7 @@ public class InputState extends AppStrategizingState<List<?>> {
 
     public InputState(AppDataStorage storage) {
         super(storage);
-        stratages.put(Scanner.class, new HandInputStratage());
+        stratages.put(Scanner.class, new HandInputStratage(storage));
     }
 
     @Override
@@ -21,7 +21,6 @@ public class InputState extends AppStrategizingState<List<?>> {
         super.onUpdate(stateMachine);
 
         var result = doStratage(scanner);
-
         if (result == null) {
             stateMachine.stop();
             return;

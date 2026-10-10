@@ -3,9 +3,13 @@ package App.States;
 import App.AppDataStorage;
 import App.Comparators.UniversalComparators;
 import App.States.Strategizing.AppStrategizingState;
-import App.States.Strategizing.Sorting.*;
+import App.States.Strategizing.Sorting.BubbleSortStratage;
+import App.States.Strategizing.Sorting.InsertionSortStratage;
+import App.States.Strategizing.Sorting.QuickSortStratage;
+import App.States.Strategizing.Sorting.SortContext;
 import App.Universal.UniversalClass;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class SortDataState extends AppStrategizingState<List<UniversalClass>> {
@@ -28,13 +32,19 @@ public class SortDataState extends AppStrategizingState<List<UniversalClass>> {
             return;
         }
 
-        var context = new SortContext<>(
-                data,
-                UniversalComparators.byField(0));
+        int field = storage.getSortFieldIndex();
+        Comparator<UniversalClass> comparator = storage.isSortDescending()
+                ? UniversalComparators.byFieldDesc(field)
+                : UniversalComparators.byField(field);
 
-        var sorted = doStratage(QuickSortStratage.class, context);
+        Class<?> algorithm = storage.getSortAlgorithm() != null
+                ? storage.getSortAlgorithm()
+                : QuickSortStratage.class;
+
+        var context = new SortContext<>(data, comparator);
+        var sorted  = doStratage(algorithm, context);
+
         storage.setConvertedData(sorted);
-
         stateMachine.switchState(OutputDataState.class);
     }
 }
