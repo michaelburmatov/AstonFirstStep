@@ -4,7 +4,7 @@ import App.AppDataStorage;
 import Architecture.GoF.Behavioral.StateMachine;
 
 public class AppStateMachine extends StateMachine<AppStateMachine> {
-    private AppDataStorage storage;
+    private AppDataStorage storage = new AppDataStorage();
     public AppStateMachine(){
         states.put(InitState.class, new InitState());
         states.put(InputState.class, new InputState(storage));
