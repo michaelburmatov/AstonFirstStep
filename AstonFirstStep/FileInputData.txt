@@ -1,0 +1,20 @@
+@Tesla Model S!2022!Red
+@Toyota Camry!2020!Black
+@Ford Mustang!2018!Blue
+@Honda Civic!2021!White
+@BMW M3!2023!Silver
+@Audi A4!2019!Gray
+@Mercedes C-Class!2021!Black
+@Volkswagen Golf!2020!Blue
+@Nissan Altima!2017!Red
+@Chevrolet Camaro!2019!Yellow
+@Porsche 911!2024!Orange
+@Mazda MX-5!2022!Red
+@Subaru Impreza!2020!Blue
+@Hyundai Elantra!2021!Silver
+@Kia Stinger!2023!Gray
+@Lexus IS!2019!White
+@Jaguar F-Type!2022!Green
+@Volvo XC90!2021!Brown
+@Land Rover Defender!2023!Black
+@Jeep Wrangler!2020!Green
