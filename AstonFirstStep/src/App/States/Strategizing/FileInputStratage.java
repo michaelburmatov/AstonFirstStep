@@ -1,6 +1,7 @@
 package App.States.Strategizing;
 
 import App.States.Strategizing.Contexts.FileInputContext;
+import App.Utility.InstanceMaker;
 import Architecture.GoF.Behavioral.StratageResult;
 
 import java.io.BufferedReader;
@@ -39,7 +40,7 @@ public class FileInputStratage implements StratageResult<List<?>, FileInputConte
                     }
 
                     if (!fieldValues.isEmpty()) {
-                        Object instance = createInstance(targetClass, fieldValues);
+                        Object instance = InstanceMaker.createInstance(targetClass, fieldValues);
                         result.add(instance);
                     }
 
@@ -64,7 +65,7 @@ public class FileInputStratage implements StratageResult<List<?>, FileInputConte
                 fieldValues.add(buffer.toString().trim());
             }
             if (!fieldValues.isEmpty()) {
-                Object instance = createInstance(targetClass, fieldValues);
+                Object instance = InstanceMaker.createInstance(targetClass, fieldValues);
                 result.add(instance);
             }
 
@@ -75,70 +76,5 @@ public class FileInputStratage implements StratageResult<List<?>, FileInputConte
         return result;
     }
 
-    private Object createInstance(Class<?> type, List<String> values) {
-        try {
-            Constructor<?> constructor = type.getDeclaredConstructor();
-            constructor.setAccessible(true);
-            Object instance = constructor.newInstance();
 
-            Field[] classFields = type.getDeclaredFields();
-
-            for (int i = 0; i < Math.min(values.size(), classFields.length); i++) {
-                Field field = classFields[i];
-                String value = values.get(i);
-
-                field.setAccessible(true);
-                Object convertedValue = convertValue(value, field.getType());
-                field.set(instance, convertedValue);
-            }
-
-            return instance;
-        } catch (Exception e) {
-            throw new RuntimeException("Ошибка при создании экземпляра класса " + type.getName(), e);
-        }
-    }
-
-    private Object convertValue(String value, Class<?> type) {
-        if (value == null || value.isEmpty()) {
-            return getDefaultValue(type);
-        }
-
-        try {
-            if (type == String.class) {
-                return value;
-            } else if (type == int.class || type == Integer.class) {
-                return Integer.parseInt(value);
-            } else if (type == long.class || type == Long.class) {
-                return Long.parseLong(value);
-            } else if (type == double.class || type == Double.class) {
-                return Double.parseDouble(value);
-            } else if (type == float.class || type == Float.class) {
-                return Float.parseFloat(value);
-            } else if (type == boolean.class || type == Boolean.class) {
-                return Boolean.parseBoolean(value);
-            } else if (type == short.class || type == Short.class) {
-                return Short.parseShort(value);
-            } else if (type == byte.class || type == Byte.class) {
-                return Byte.parseByte(value);
-            } else if (type == char.class || type == Character.class) {
-                return value.charAt(0);
-            }
-
-            return type.getMethod("valueOf", String.class).invoke(null, value);
-        } catch (Exception e) {
-            throw new RuntimeException("Не удалось преобразовать значение '" + value + "' в тип " + type.getName(), e);
-        }
-    }
-
-    private Object getDefaultValue(Class<?> type) {
-        if (type == int.class) return 0;
-        if (type == long.class) return 0L;
-        if (type == double.class) return 0.0d;
-        if (type == float.class) return 0.0f;
-        if (type == boolean.class) return false;
-        if (type == short.class) return (short) 0;
-        if (type == byte.class) return (byte) 0;
-        if (type == char.class) return '\u0000';
-        return null;
-    }
 }

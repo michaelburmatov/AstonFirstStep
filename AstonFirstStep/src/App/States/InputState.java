@@ -4,8 +4,10 @@ import App.AppDataStorage;
 import App.InputClasses.Car;
 import App.States.Strategizing.AppStrategizingState;
 import App.States.Strategizing.Contexts.FileInputContext;
+import App.States.Strategizing.Contexts.RandomizeInputContext;
 import App.States.Strategizing.FileInputStratage;
 import App.States.Strategizing.HandInputStratage;
+import App.States.Strategizing.RandomizeInputStratage;
 import App.States.Strategizing.Sorting.BubbleSortStratage;
 import App.States.Strategizing.Sorting.InsertionSortStratage;
 import App.States.Strategizing.Sorting.QuickSortStratage;
@@ -21,21 +23,22 @@ public class InputState extends AppStrategizingState<List<?>> {
         super(storage);
         stratages.put(Scanner.class, new HandInputStratage(storage));
         stratages.put(FileInputContext.class, new FileInputStratage());
+        stratages.put(RandomizeInputContext.class, new RandomizeInputStratage());
     }
 
     @Override
     public void onUpdate(AppStateMachine stateMachine) throws Exception {
         super.onUpdate(stateMachine);
 
-        System.out.print("Источник (1 - вручную, 2 - из файла, 3 - выход): ");
+        System.out.print("Источник (1 - вручную, 2 - из файла, 3 - рандомно, 4 - выход): ");
         String choice = scanner.nextLine().trim();
 
         Class<?> type = Car.class;
         List<?> result;
+        storage.setType(type);
 
         switch (choice) {
             case "1": {
-                storage.setType(type);
                 result = doStratage(scanner);
                 if (result == null) { stateMachine.stop(); return; }
                 break;
@@ -44,10 +47,19 @@ public class InputState extends AppStrategizingState<List<?>> {
                 System.out.print("Путь к файлу (Enter — FileInputData.txt): ");
                 String path = scanner.nextLine().trim();
                 result = doStratage(new FileInputContext(path, type));
-                storage.setType(type);
                 break;
             }
-            case "3":
+            case "3": {
+                System.out.print("Количество элемонтов: ");
+                var countElements = scanner.nextInt();
+                System.out.print("Количество полей в элементе: ");
+                var countFields = scanner.nextInt();
+                System.out.print("Размер поля: ");
+                var sizeField = scanner.nextInt();
+                result = doStratage(new RandomizeInputContext(type, countElements, countFields, sizeField));
+                break;
+            }
+            case "4":
                 stateMachine.stop();
                 return;
             default:
