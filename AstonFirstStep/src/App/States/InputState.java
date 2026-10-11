@@ -83,6 +83,9 @@ public class InputState extends AppStrategizingState<List<?>> {
 
         System.out.print("Алгоритм (1 - пузырёк, 2 - быстрая, 3 - вставками): ");
         storage.setSortAlgorithm(pickAlgorithm(scanner.nextLine().trim()));
+
+        System.out.print("Использовать специфичную сортировку? (1 - да, 2 - нет): ");
+        storage.setUsingSpecialSort("1".equals(scanner.nextLine().trim()));
     }
 
     private int parseIntSafe(String s, int fallback) {

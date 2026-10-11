@@ -12,6 +12,7 @@ public class AppStateMachine extends StateMachine<AppStateMachine> {
         states.put(InputState.class, new InputState(storage));
         states.put(ValidationDataState.class, new ValidationDataState(storage));
         states.put(ConvertDataState.class, new ConvertDataState(storage));
+        states.put(SpecialSortDataState.class, new SpecialSortDataState(storage));
         states.put(SortDataState.class, new SortDataState(storage));
         states.put(OutputDataState.class, new OutputDataState(storage));
 

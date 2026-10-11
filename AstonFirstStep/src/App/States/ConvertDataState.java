@@ -37,6 +37,10 @@ public class ConvertDataState extends AppState<AppStateMachine> {
     @Override
     public void onUpdate(AppStateMachine stateMachine) throws Exception {
         super.onUpdate(stateMachine);
-        stateMachine.switchState(SortDataState.class);
+
+        if(storage.isUsingSpecialSort())
+            stateMachine.switchState(SpecialSortDataState.class);
+        else
+            stateMachine.switchState(SortDataState.class);
     }
 }

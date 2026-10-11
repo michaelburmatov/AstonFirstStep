@@ -14,6 +14,7 @@ public class AppDataStorage {
     private int sortFieldIndex = 0;
     private Class<?> sortAlgorithm = null;
     private boolean sortDescending = false;
+    private boolean usingSpecialSort;
 
     public AppDataStorage() {}
 
@@ -38,4 +39,11 @@ public class AppDataStorage {
 
     public boolean isSortDescending() { return sortDescending; }
     public void setSortDescending(boolean sortDescending) { this.sortDescending = sortDescending; }
+
+    public void setUsingSpecialSort(boolean usingSpecialSort) {
+        this.usingSpecialSort = usingSpecialSort;
+    }
+    public boolean isUsingSpecialSort() {
+        return usingSpecialSort;
+    }
 }

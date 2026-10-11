@@ -33,18 +33,27 @@ public class SortDataState extends AppStrategizingState<List<UniversalClass>> {
         }
 
         int field = storage.getSortFieldIndex();
-        Comparator<UniversalClass> comparator = storage.isSortDescending()
-                ? UniversalComparators.byFieldDesc(field)
-                : UniversalComparators.byField(field);
-
-        Class<?> algorithm = storage.getSortAlgorithm() != null
-                ? storage.getSortAlgorithm()
-                : QuickSortStratage.class;
+        Comparator<UniversalClass> comparator = getComparator(field);
+        Class<?> algorithm = getAlgorithm();
 
         var context = new SortContext<>(data, comparator);
         var sorted  = doStratage(algorithm, context);
 
         storage.setConvertedData(sorted);
         stateMachine.switchState(OutputDataState.class);
+    }
+
+    protected Comparator<UniversalClass> getComparator(int field) {
+        Comparator<UniversalClass> comparator = storage.isSortDescending()
+                ? UniversalComparators.byFieldDesc(field)
+                : UniversalComparators.byField(field);
+        return comparator;
+    }
+
+    protected Class<?> getAlgorithm() {
+        Class<?> algorithm = storage.getSortAlgorithm() != null
+                ? storage.getSortAlgorithm()
+                : QuickSortStratage.class;
+        return algorithm;
     }
 }
