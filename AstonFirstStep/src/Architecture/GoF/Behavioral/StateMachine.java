@@ -30,7 +30,6 @@ public abstract class StateMachine<T extends StateMachine<T>> {
         State<T> nextState = states.get(stateClass);
 
         if (nextState == null) {
-            //log
             return;
         }
 
