@@ -6,6 +6,9 @@ import App.States.Strategizing.AppStrategizingState;
 import App.States.Strategizing.Contexts.FileInputContext;
 import App.States.Strategizing.FileInputStratage;
 import App.States.Strategizing.HandInputStratage;
+import App.States.Strategizing.Sorting.BubbleSortStratage;
+import App.States.Strategizing.Sorting.InsertionSortStratage;
+import App.States.Strategizing.Sorting.QuickSortStratage;
 
 import java.util.List;
 import java.util.Scanner;
@@ -28,21 +31,20 @@ public class InputState extends AppStrategizingState<List<?>> {
         String choice = scanner.nextLine().trim();
 
         Class<?> type = Car.class;
+        List<?> result;
 
         switch (choice) {
             case "1": {
                 storage.setType(type);
-                var result = doStratage(scanner);
+                result = doStratage(scanner);
                 if (result == null) { stateMachine.stop(); return; }
-                storage.setOriginalData(result);
                 break;
             }
             case "2": {
                 System.out.print("Путь к файлу (Enter — FileInputData.txt): ");
                 String path = scanner.nextLine().trim();
-                var result = doStratage(new FileInputContext(path, type));
+                result = doStratage(new FileInputContext(path, type));
                 storage.setType(type);
-                storage.setOriginalData(result);
                 break;
             }
             case "3":
@@ -53,6 +55,34 @@ public class InputState extends AppStrategizingState<List<?>> {
                 return;
         }
 
+        storage.setOriginalData(result);
+
+        askSortOptions();
+
         stateMachine.switchState(ValidationDataState.class);
+    }
+
+    private void askSortOptions() {
+        System.out.print("Поле для сортировки (0/1/2): ");
+        storage.setSortFieldIndex(parseIntSafe(scanner.nextLine(), 0));
+
+        System.out.print("Направление (1 - возрастание, 2 - убывание): ");
+        storage.setSortDescending("2".equals(scanner.nextLine().trim()));
+
+        System.out.print("Алгоритм (1 - пузырёк, 2 - быстрая, 3 - вставками): ");
+        storage.setSortAlgorithm(pickAlgorithm(scanner.nextLine().trim()));
+    }
+
+    private int parseIntSafe(String s, int fallback) {
+        try { return Integer.parseInt(s.trim()); } catch (Exception e) { return fallback; }
+    }
+
+    private Class<?> pickAlgorithm(String choice) {
+        switch (choice) {
+            case "1": return BubbleSortStratage.class;
+            case "3": return InsertionSortStratage.class;
+            case "2":
+            default:  return QuickSortStratage.class;
+        }
     }
 }
