@@ -12,6 +12,6 @@ public class HandInputStratage implements StratageResult<List<?>, Scanner> {
 
         //---------- Просто пример ---------
         var input = context.nextLine();
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 }
