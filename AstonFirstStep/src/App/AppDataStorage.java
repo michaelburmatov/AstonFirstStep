@@ -7,23 +7,28 @@ import java.util.List;
 
 public class AppDataStorage {
 
-    private List<?> originalData;
-    private List<UniversalClass> convertedData;
+    private Class<?> type;
+    private List<?> originalData = new ArrayList<>();
+    private List<UniversalClass> convertedData = new ArrayList<>();
 
     private int sortFieldIndex = 0;
     private Class<?> sortAlgorithm = null;
     private boolean sortDescending = false;
 
+    public AppDataStorage() {}
+
     public AppDataStorage(List<?> dataList) {
-        this.originalData  = dataList != null ? dataList : new ArrayList<>();
-        this.convertedData = new ArrayList<>();
+        if (dataList != null) this.originalData = dataList;
     }
 
-    public List<UniversalClass> getConvertedData() { return convertedData; }
-    public void setConvertedData(List<UniversalClass> convertedData) { this.convertedData = convertedData; }
+    public Class<?> getType() { return type; }
+    public void setType(Class<?> type) { this.type = type; }
 
     public List<?> getOriginalData() { return originalData; }
     public void setOriginalData(List<?> originalData) { this.originalData = originalData; }
+
+    public List<UniversalClass> getConvertedData() { return convertedData; }
+    public void setConvertedData(List<UniversalClass> convertedData) { this.convertedData = convertedData; }
 
     public int getSortFieldIndex() { return sortFieldIndex; }
     public void setSortFieldIndex(int sortFieldIndex) { this.sortFieldIndex = sortFieldIndex; }

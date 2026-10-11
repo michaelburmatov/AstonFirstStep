@@ -2,7 +2,9 @@ package App.States;
 
 import App.AppDataStorage;
 import App.DataConvert.ConverterToUniversal;
-import App.Proxy.TestClass;
+import App.Universal.UniversalClass;
+
+import java.util.List;
 
 public class ConvertDataState extends AppState<AppStateMachine> {
 
@@ -14,32 +16,22 @@ public class ConvertDataState extends AppState<AppStateMachine> {
     public void onEnter(AppStateMachine stateMachine) throws Exception {
         super.onEnter(stateMachine);
 
-        var builder = new ConverterToUniversal<TestClass>();
+        List<UniversalClass> result = convert(storage.getType(), storage.getOriginalData());
+        storage.setConvertedData(result);
 
-        var original = storage.getOriginalData();
-        if (original != null) {
-            for (var raw : original) {
-                var parsed = parseTestClass(String.valueOf(raw));
-                if (parsed != null) {
-                    builder.append(parsed);
-                }
-            }
+        for (var res : result) {
+            debuger.Log(res);
         }
-
-        storage.setConvertedData(builder.build());
     }
 
-    private TestClass parseTestClass(String raw) {
-        var parts = raw.split(",");
-        if (parts.length != 3) return null;
-        try {
-            Integer first  = Integer.parseInt(parts[0].trim());
-            String  second = parts[1].trim();
-            Boolean third  = Boolean.parseBoolean(parts[2].trim());
-            return new TestClass(first, second, third);
-        } catch (NumberFormatException e) {
-            return null;
+    private <T> List<UniversalClass> convert(Class<T> type, List<?> data) {
+        var converter = new ConverterToUniversal<T>(type);
+        if (data != null) {
+            for (Object object : data) {
+                converter.append(type.cast(object));
+            }
         }
+        return converter.build();
     }
 
     @Override
