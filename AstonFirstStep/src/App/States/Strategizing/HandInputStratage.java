@@ -40,6 +40,7 @@ public class HandInputStratage implements StratageResult<List<?>, Scanner> {
             if (obj != null) result.add(obj);
         }
         return result;
+
     }
 
     private Object buildObject(Class<?> type, String row) {
