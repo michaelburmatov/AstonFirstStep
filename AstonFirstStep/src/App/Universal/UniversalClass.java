@@ -14,6 +14,10 @@ public class UniversalClass {
         return fields[index].getValue();
     }
 
+    public Class getFieldType(int index) {
+        return fields[index].getType();
+    }
+
     public int getCount() {
         return  count;
     }
