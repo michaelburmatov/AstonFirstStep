@@ -35,12 +35,7 @@ public class SpecialSortDataState extends SortDataState{
         var listEvenNumbers = new ArrayList<UniversalClass>();
         boolean[] isEvenIndex = new boolean[original.length];
         for (int i = 0; i < original.length; i++) {
-            var element = original[i];
-            var value = element.getField(naturalIndex);
-            if (value != null && ((Number) value).longValue() % 2 == 0) {
-                isEvenIndex[i] = true;
-                listEvenNumbers.add(element);
-            }
+            extracted(original, i, naturalIndex, isEvenIndex, listEvenNumbers);
         }
 
         int field = storage.getSortFieldIndex();
@@ -63,6 +58,15 @@ public class SpecialSortDataState extends SortDataState{
 
         storage.setConvertedData(resultList);
         stateMachine.switchState(OutputDataState.class);
+    }
+
+    private static void extracted(UniversalClass[] original, int i, int naturalIndex, boolean[] isEvenIndex, ArrayList<UniversalClass> listEvenNumbers) {
+        var element = original[i];
+        var value = element.getField(naturalIndex);
+        if (value != null && ((Number) value).longValue() % 2 == 0) {
+            isEvenIndex[i] = true;
+            listEvenNumbers.add(element);
+        }
     }
 
 

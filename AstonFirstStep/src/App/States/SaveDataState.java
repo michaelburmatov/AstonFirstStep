@@ -55,6 +55,6 @@ public class SaveDataState extends AppState<AppStateMachine> {
         }
 
         System.out.println("Данные сохранены в " + file.toAbsolutePath());
-        stateMachine.stop();
+        stateMachine.switchState(InputState.class);
     }
 }
