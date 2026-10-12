@@ -1,5 +1,7 @@
 package App.Universal;
 
+import java.util.Arrays;
+
 public class UniversalClass {
     private final UniversalField<?>[] fields;
     private final int count;
@@ -12,7 +14,18 @@ public class UniversalClass {
         return fields[index].getValue();
     }
 
+    public Class getFieldType(int index) {
+        return fields[index].getType();
+    }
+
     public int getCount() {
         return  count;
+    }
+
+    @Override
+    public String toString() {
+        return "UniversalClass{" +
+                "fields=" + Arrays.toString(fields) +
+                '}';
     }
 }

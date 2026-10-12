@@ -30,7 +30,6 @@ public abstract class StateMachine<T extends StateMachine<T>> {
         State<T> nextState = states.get(stateClass);
 
         if (nextState == null) {
-            //log
             return;
         }
 
@@ -54,7 +53,9 @@ public abstract class StateMachine<T extends StateMachine<T>> {
             activeState.onUpdate(myself);
         }
         catch (Exception e) {
-            System.out.println(e);
+            System.out.println("State " + activeState.getClass().getSimpleName() + " failed: " + e);
+            e.printStackTrace();
+            stop();
         }
     }
     private void activeStateExit(){

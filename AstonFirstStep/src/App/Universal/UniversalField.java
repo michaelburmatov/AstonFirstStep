@@ -16,4 +16,12 @@ public class UniversalField<T> {
     public Class<T> getType() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return "UniversalField{" +
+                "type=" + type +
+                ", object=" + object +
+                '}';
+    }
 }
