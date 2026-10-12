@@ -10,6 +10,6 @@ public class OutputDataState extends AppState<AppStateMachine>{
     @Override
     public void onUpdate(AppStateMachine stateMachine) throws Exception {
         super.onUpdate(stateMachine);
-        stateMachine.stop();
+        stateMachine.switchState(SaveDataState.class);
     }
 }
