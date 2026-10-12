@@ -2,7 +2,6 @@ package App.States;
 
 import App.AppDataStorage;
 import App.Concurrency.OccurrenceCounter;
-import App.InputClasses.Car;
 import App.Universal.UniversalClass;
 
 import java.util.List;
@@ -23,27 +22,35 @@ public class OutputDataState extends AppState<AppStateMachine> {
         System.out.println("\n***Отсортированный результат***");
         for (UniversalClass item : storage.getConvertedData()) {
             StringBuilder sb = new StringBuilder();
+
             for (int i = 0; i < item.getCount(); i++) {
                 sb.append(item.getField(i));
-                if (i < item.getCount() - 1) sb.append(", ");
+
+                if (i < item.getCount() - 1) {
+                    sb.append(", ");
+                }
             }
+
             System.out.println(sb);
         }
 
         countOccurrences();
 
-        stateMachine.switchState(InputState.class);
+        stateMachine.switchState(SaveDataState.class);
     }
 
     private void countOccurrences() throws InterruptedException {
         System.out.print("Посчитать вхождения (1 - да, 2 - пропустить): ");
-        if (!"1".equals(scanner.nextLine().trim())) return;
+        if (!"1".equals(scanner.nextLine().trim())) {
+            return;
+        }
 
         System.out.print("Какую модель машины искать: ");
         String target = scanner.nextLine().trim();
 
         System.out.print("Сколько потоков использовать: ");
         int threads;
+
         try {
             threads = Integer.parseInt(scanner.nextLine().trim());
         } catch (NumberFormatException e) {
@@ -58,7 +65,9 @@ public class OutputDataState extends AppState<AppStateMachine> {
                 threads
         );
 
-        System.out.println("Найдено вхождений '" + target + "': " + count
-                + " (потоков: " + threads + ")");
+        System.out.println(
+                "Найдено вхождений '" + target + "': " + count
+                        + " (потоков: " + threads + ")"
+        );
     }
 }
