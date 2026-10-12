@@ -1,8 +1,16 @@
 package App.States;
 
 import App.AppDataStorage;
+import App.Concurrency.OccurrenceCounter;
+import App.Universal.UniversalClass;
 
-public class OutputDataState extends AppState<AppStateMachine>{
+import java.util.List;
+import java.util.Scanner;
+
+public class OutputDataState extends AppState<AppStateMachine> {
+
+    private final Scanner scanner = new Scanner(System.in);
+
     public OutputDataState(AppDataStorage storage) {
         super(storage);
     }
@@ -10,6 +18,56 @@ public class OutputDataState extends AppState<AppStateMachine>{
     @Override
     public void onUpdate(AppStateMachine stateMachine) throws Exception {
         super.onUpdate(stateMachine);
-        stateMachine.stop();
+
+        System.out.println("\n***Отсортированный результат***");
+        for (UniversalClass item : storage.getConvertedData()) {
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < item.getCount(); i++) {
+                sb.append(item.getField(i));
+
+                if (i < item.getCount() - 1) {
+                    sb.append(", ");
+                }
+            }
+
+            System.out.println(sb);
+        }
+
+        countOccurrences();
+
+        stateMachine.switchState(SaveDataState.class);
+    }
+
+    private void countOccurrences() throws InterruptedException {
+        System.out.print("Посчитать вхождения (1 - да, 2 - пропустить): ");
+        if (!"1".equals(scanner.nextLine().trim())) {
+            return;
+        }
+
+        System.out.print("Какую модель машины искать: ");
+        String target = scanner.nextLine().trim();
+
+        System.out.print("Сколько потоков использовать: ");
+        int threads;
+
+        try {
+            threads = Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            threads = 2;
+        }
+
+        List<UniversalClass> data = storage.getConvertedData();
+
+        int count = OccurrenceCounter.count(
+                data,
+                item -> target.equalsIgnoreCase(String.valueOf(item.getField(0))),
+                threads
+        );
+
+        System.out.println(
+                "Найдено вхождений '" + target + "': " + count
+                        + " (потоков: " + threads + ")"
+        );
     }
 }
